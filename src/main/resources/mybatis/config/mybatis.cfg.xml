@@ -7,4 +7,8 @@
         <!--开启驼峰命名-->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
+    <!--开启别名-->
+    <typeAliases>
+        <package name="com.xianglei.domain"></package>
+    </typeAliases>
 </configuration>

@@ -3,6 +3,9 @@ package com.xianglei.park_service.controller;
 import com.xianglei.park_service.common.BaseJson;
 import com.xianglei.park_service.common.ListParamUtils;
 import com.xianglei.park_service.common.Tools;
+import com.xianglei.park_service.domain.Parking;
+import com.xianglei.park_service.service.ParkLotService;
+import com.xianglei.park_service.service.commonservice.CommonUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,39 +19,44 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 描述：车位管理 增删改查
+ * 描述：停车场管理
+ * 增删改查
  * 时间：[2019/12/3:16:05]
  * 作者：xianglei
  * params: * @param null
  */
 @RestController
-@RequestMapping("/api/v1/product")
+@RequestMapping("/parkManger")
 public class ParkingController {
 
     private Logger logger = LoggerFactory.getLogger(ParkingController.class);
     @Autowired
-    UserMangerService userMangerService;
+    ParkLotService parkLotService;
 
-    @PostMapping("/addUser")
-    private BaseJson addUser(@RequestBody User user) {
+    /**
+     * 添加停车场 设置信息
+     * @param park
+     * @return
+     */
+    @PostMapping("/addPark")
+    private BaseJson addPark(@RequestBody Parking park) {
         BaseJson baseJson = new BaseJson(false);
         try {
-
-            int nums = userMangerService.addUser(user);
-            baseJson.setMessage("新增成功");
+            int nums = parkLotService.addPark(park);
+            baseJson.setMessage("停车场新增成功");
             baseJson.setStatus(true);
             baseJson.setData(nums);
             baseJson.setCode(HttpStatus.OK.value());
-            logger.info(user.getFlowId()+":登录成功");
+            logger.info(park.getFlowId()+":停车场新增成功");
         } catch (Exception e) {
-            logger.error("人员新增接口错误:{}\n堆栈信息:{}", e.getMessage(), e);
+            logger.error("停车场新增接口错误:{}\n堆栈信息:{}", e.getMessage(), e);
             baseJson.setMessage("服务端内部错误:" + e.getMessage());
             baseJson.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
         return baseJson;
     }
 
-    @PostMapping("/deleteUser")
+   /* @PostMapping("/deleteUser")
     private BaseJson deleteUser(@RequestBody Map<String, String> map) {
         BaseJson baseJson = new BaseJson(false);
         try {
@@ -200,7 +208,7 @@ public class ParkingController {
             baseJson.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
         return baseJson;
-    }
+    }*/
 
 
 }

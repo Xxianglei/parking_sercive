@@ -45,13 +45,14 @@ spring:
     password:
     timeout: PT30M
 
+
 mybatis:
-  # mybatis配置文件所在路径
-  config-location: classpath:mybatis/mybatis.cfg.xml    
   # 所有Entity别名类所在包
   type-aliases-package: com.xianglei.park_service.domain 
   # mapper映射文件
-  mapper-locations: classpath:mybatis/mapper/**/*.xml   
+  mapper-locations: classpath:mybatis/mapper/**/*.xml  
+  # mybatis配置文件所在路径 屁股后面也不能多留空格
+  config-location: classpath:mybatis/config/mybatis.cfg.xml
 
 # 日志打印
 logging:

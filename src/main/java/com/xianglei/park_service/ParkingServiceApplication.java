@@ -8,7 +8,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@EnableHystrix //开启 Hystrix 熔断机制的支持
+////////@EnableHystrix //开启 Hystrix 熔断机制的支持
 @SpringBootApplication
 @EnableEurekaClient
 // 开启feign远程调用会扫描标记了指定包下@FeignClient注解的接口，并生成此接口的代理对象
