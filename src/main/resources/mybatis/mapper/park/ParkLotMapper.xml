@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xianglei.park_service.mapper.ParkLotMapper">
+
+
+    <insert id="insertPark">
+        INSERT INTO `BS_PARK` (
+          `PARK_NAME`,
+          `B_PRICE`,
+          `Y_PRICE`,
+          `V_PRICE`,
+          `VOLUME`,
+          `LOCATION`,
+          `JD`,
+          `WD`,
+          `STRATAGE`
+        )
+        VALUES
+          (
+            #{parkName},
+            #{bPrice},
+            #{yPrice},
+            #{vPrice},
+            #{volume},
+            #{location},
+            #{jd},
+            #{wd},
+            #{stratage}
+          ) ;
+    </insert>
+</mapper>

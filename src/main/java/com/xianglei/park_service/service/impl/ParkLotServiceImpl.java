@@ -6,6 +6,8 @@ import com.xianglei.park_service.service.ParkLotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class ParkLotServiceImpl implements ParkLotService {
 
@@ -14,6 +16,9 @@ public class ParkLotServiceImpl implements ParkLotService {
 
     @Override
     public int addPark(Parking park) {
-        return 0;
+        UUID uuid = UUID.randomUUID();
+        park.setFlowId(uuid.toString());
+        int result = parkLotMapper.insertPark(park);
+        return result;
     }
 }
