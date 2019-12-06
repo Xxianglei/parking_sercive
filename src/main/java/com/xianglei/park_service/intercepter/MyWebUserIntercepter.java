@@ -4,12 +4,14 @@ package com.xianglei.park_service.intercepter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.org.apache.xerces.internal.util.HTTPInputSource;
 import com.xianglei.park_service.common.BaseJson;
+import com.xianglei.park_service.common.GetTokenFromRedisUtils;
 import com.xianglei.park_service.common.Tools;
 import com.xianglei.park_service.service.commonservice.CommonUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -25,16 +27,19 @@ import java.io.PrintWriter;
 public class MyWebUserIntercepter extends HandlerInterceptorAdapter {
     @Autowired
     CommonUserService commonUserService;
+    @Autowired
+    RedisTemplate redisTemplate;
+
     private Logger logger = LoggerFactory.getLogger(MyWebUserIntercepter.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         BaseJson baseJson = new BaseJson(false);
-        HttpSession session = request.getSession();
-        Object token = session.getAttribute("flow_Id");
-        if (!Tools.isNull(token)) {
+        // 头那token从redis拿值
+        String tokenFromRedis = GetTokenFromRedisUtils.getTokenFromRedis(request, response,redisTemplate);
+        if (!Tools.isNull(tokenFromRedis)) {
             logger.info("通过拦截器");
-            return commonUserService.isSuperMan(token.toString());
+            return commonUserService.isSuperMan(tokenFromRedis);
         } else {
             logger.info("当前请求用户不具备超级管理权限：{}", request.getRemoteHost());
             response.setCharacterEncoding("utf-8");
