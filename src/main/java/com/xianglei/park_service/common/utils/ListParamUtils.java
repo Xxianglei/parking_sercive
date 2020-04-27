@@ -1,4 +1,4 @@
-package com.xianglei.park_service.common;
+package com.xianglei.park_service.common.utils;
 
 import org.springframework.stereotype.Component;
 

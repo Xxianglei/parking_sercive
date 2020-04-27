@@ -1,19 +1,6 @@
 server:
   port: 9001
 
-
-#指定注册中心地址
-eureka:
-  instance:
-    hostname: 106.54.75.24
-    prefer-ip-address: true
-    instance-id: ${spring.application.name}:${server.port} # 指定实例ID,就不会显示主机名
-    ip-address: 39.105.82.150
-  client:
-    serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:9000/eureka/
-
-
 #服务的名称
 spring:
   application:
@@ -44,16 +31,15 @@ spring:
     port: 6379
     password:
     timeout: PT30M
-
-
-mybatis:
-  # 所有Entity别名类所在包
-  type-aliases-package: com.xianglei.park_service.domain 
-  # mapper映射文件
-  mapper-locations: classpath:mybatis/mapper/**/*.xml  
-  # mybatis配置文件所在路径 屁股后面也不能多留空格
-  config-location: classpath:mybatis/config/mybatis.cfg.xml
-
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 120.26.184.125:8848
+        port: 9001
+        ip: 39.105.82.150
 # 日志打印
 logging:
   path: /data/logs/${spring.application.name}
+
+mybatis:
+  type-aliases-package: com.xianglei.account_service.domain

@@ -3,11 +3,12 @@
  *
  * Copyright 2014 CDSF Corporation, Inc. All rights reserved.
  */
-package com.xianglei.park_service.common;
+package com.xianglei.park_service.common.utils;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xianglei.park_service.common.BaseJson;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
