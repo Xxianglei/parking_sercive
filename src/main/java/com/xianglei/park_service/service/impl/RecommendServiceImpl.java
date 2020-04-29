@@ -64,6 +64,8 @@ public class RecommendServiceImpl implements RecommendService {
             bsParkVO.setFlowId(bsPark.getFlowId());
             bsParkVO.setRemain(re > 0 ? re : 0);
             bsParkVO.setLocation(bsPark.getLocation());
+            bsParkVO.setbPrice(bsPark.getbPrice());
+            bsParkVO.setyPrice(bsPark.getyPrice());
             bsParkVO.setParkName(bsPark.getParkName());
             bsParkVO.setVolume(bsPark.getVolume());
             bsParkVOS.add(bsParkVO);

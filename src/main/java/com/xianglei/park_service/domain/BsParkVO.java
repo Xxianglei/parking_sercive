@@ -1,6 +1,8 @@
 package com.xianglei.park_service.domain;
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
 
 /**
@@ -18,6 +20,11 @@ public class BsParkVO implements Serializable, Cloneable {
     private Integer remain;
 
     private String location;
+
+    private Double bPrice;
+
+    private Double yPrice;
+
 
     public String getFlowId() {
         return flowId;
@@ -57,5 +64,21 @@ public class BsParkVO implements Serializable, Cloneable {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public Double getbPrice() {
+        return bPrice;
+    }
+
+    public void setbPrice(Double bPrice) {
+        this.bPrice = bPrice;
+    }
+
+    public Double getyPrice() {
+        return yPrice;
+    }
+
+    public void setyPrice(Double yPrice) {
+        this.yPrice = yPrice;
     }
 }
