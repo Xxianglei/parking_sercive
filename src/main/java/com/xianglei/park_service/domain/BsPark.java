@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 
 @TableName(value ="BS_PARK")
@@ -41,7 +42,7 @@ public class BsPark implements Serializable, Cloneable {
     @TableField("VOLUME")
     private Integer volume;
     /**
-     * 已经停放的车辆数
+     * 是否已启用
      */
     @TableField("IN_USED")
     private Integer inUsed;
@@ -165,5 +166,29 @@ public class BsPark implements Serializable, Cloneable {
 
     public void setStratage(String stratage) {
         this.stratage = stratage;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BsPark bsPark = (BsPark) o;
+        return Objects.equals(flowId, bsPark.flowId) &&
+                Objects.equals(parkName, bsPark.parkName) &&
+                Objects.equals(bPrice, bsPark.bPrice) &&
+                Objects.equals(yPrice, bsPark.yPrice) &&
+                Objects.equals(vPrice, bsPark.vPrice) &&
+                Objects.equals(volume, bsPark.volume) &&
+                Objects.equals(inUsed, bsPark.inUsed) &&
+                Objects.equals(location, bsPark.location) &&
+                Objects.equals(jd, bsPark.jd) &&
+                Objects.equals(wd, bsPark.wd) &&
+                Objects.equals(createDate, bsPark.createDate) &&
+                Objects.equals(stratage, bsPark.stratage);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(flowId, parkName, bPrice, yPrice, vPrice, volume, inUsed, location, jd, wd, createDate, stratage);
     }
 }
