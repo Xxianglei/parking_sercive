@@ -75,7 +75,7 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public List<BsPark> getListOrderByVolume() {
-        List<BsPark> bsParks = parkMapper.selectList(null);
+        List<BsPark> bsParks = parkMapper.selectList(new QueryWrapper<BsPark>().eq("IN_USED", 1));
         // 获取到所有未过期的订单  意思就是当前停车场已经使用的车位数量
         bsParks.sort(new Comparator<BsPark>() {
             @Override
@@ -96,7 +96,7 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public List<BsPark> getListOrderBySale() {
-        List<BsPark> bsParks = parkMapper.selectList(null);
+        List<BsPark> bsParks = parkMapper.selectList(new QueryWrapper<BsPark>().eq("IN_USED", 1));
         // 获取到每个停车场的非为支付的订单数量
         bsParks.sort(new Comparator<BsPark>() {
             @Override
