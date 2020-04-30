@@ -1,9 +1,7 @@
 package com.xianglei.park_service.service;
 
-import com.xianglei.park_service.common.ConditionEnum;
 import com.xianglei.park_service.domain.BsPark;
 import com.xianglei.park_service.domain.BsParkVO;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -22,12 +20,13 @@ public interface RecommendService {
      * @param condition
      * @param lng
      * @param lat
+     * @param nowDate
      * @return
      */
     List<BsPark> findStrategyThenRecommend(String userId,
                                            String condition,
                                            Double lng,
-                                           Double lat);
+                                           Double lat, String nowDate);
 
     /**
      * 处理推荐列表数据

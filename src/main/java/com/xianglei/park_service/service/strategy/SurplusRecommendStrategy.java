@@ -19,7 +19,7 @@ public class SurplusRecommendStrategy  implements RecommendStrategy {
     @Autowired
     ParkingService parkingService;
     @Override
-    public List<BsPark> recommend(String userId, Double lng, Double lat) {
+    public List<BsPark> recommend(String userId, Double lng, Double lat, String nowDate) {
         List<BsPark> listOrderByVolume = parkingService.getListOrderByVolume();
         return listOrderByVolume;
     }

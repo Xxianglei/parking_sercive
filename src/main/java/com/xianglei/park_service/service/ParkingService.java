@@ -1,8 +1,10 @@
 package com.xianglei.park_service.service;
 
 
+import com.xianglei.park_service.domain.BsOrder;
 import com.xianglei.park_service.domain.BsPark;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +25,9 @@ public interface ParkingService {
      * @return
      */
     List<BsPark> getListOrderByVolume();
+
+
+    void removeNotToday(List<BsOrder> bsOrders, Date now);
 
     /**
      * 根据价位销量排序

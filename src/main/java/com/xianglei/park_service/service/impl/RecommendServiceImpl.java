@@ -2,10 +2,12 @@ package com.xianglei.park_service.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xianglei.park_service.common.ConditionEnum;
+import com.xianglei.park_service.common.utils.DateUtils;
 import com.xianglei.park_service.domain.BsOrder;
 import com.xianglei.park_service.domain.BsPark;
 import com.xianglei.park_service.domain.BsParkVO;
 import com.xianglei.park_service.mapper.OrderMapper;
+import com.xianglei.park_service.service.ParkingService;
 import com.xianglei.park_service.service.RecommendFactory;
 import com.xianglei.park_service.service.RecommendService;
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,11 +33,13 @@ public class RecommendServiceImpl implements RecommendService {
     RecommendFactory recommendFactory;
     @Autowired
     OrderMapper orderMapper;
+    @Autowired
+    ParkingService parkingService;
 
     @Override
-    public List<BsPark> findStrategyThenRecommend(String userId, String condition, Double lng, Double lat) {
+    public List<BsPark> findStrategyThenRecommend(String userId, String condition, Double lng, Double lat, String nowDate) {
         List<BsPark> recommend = new ArrayList<>();
-        recommendFactory.setParams(userId, lng, lat);
+        recommendFactory.setParams(userId, lng, lat, nowDate);
         if (ConditionEnum.CHEAP.getName().equals(condition)) {
             recommend = recommendFactory.recommend(ConditionEnum.CHEAP);
         }
@@ -59,8 +64,14 @@ public class RecommendServiceImpl implements RecommendService {
         for (BsPark bsPark : strategyThenRecommend) {
             BsParkVO bsParkVO = new BsParkVO();
             Integer volume = bsPark.getVolume();
-            Integer nums = orderMapper.selectCount(new QueryWrapper<BsOrder>().eq("PARK_ID", bsPark.getFlowId()).ne("CHARGE", 2));
-            Integer re = volume - nums;
+            /**
+             * 获取当天车位容量使用情况
+             */
+            List<BsOrder> bsOrders = orderMapper.selectList(new QueryWrapper<BsOrder>()
+                    .eq("PARK_ID", bsPark.getFlowId())
+                    .ne("CHARGE", 2));
+            parkingService.removeNotToday(bsOrders, new Date());
+            Integer re = volume - bsOrders.size();
             bsParkVO.setFlowId(bsPark.getFlowId());
             bsParkVO.setRemain(re > 0 ? re : 0);
             bsParkVO.setLocation(bsPark.getLocation());

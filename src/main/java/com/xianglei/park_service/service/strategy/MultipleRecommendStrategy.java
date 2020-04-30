@@ -20,7 +20,7 @@ public class MultipleRecommendStrategy implements RecommendStrategy {
     ParkingService parkingService;
 
     @Override
-    public List<BsPark> recommend(String userId, Double lng, Double lat) {
+    public List<BsPark> recommend(String userId, Double lng, Double lat, String nowDate) {
         List<BsPark> listOrderByMultiple = parkingService.getListOrderByMultiple(userId, lng, lat);
         return listOrderByMultiple;
     }

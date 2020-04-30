@@ -23,7 +23,7 @@ public class CheapRecommendStrategy implements RecommendStrategy {
     ParkingService parkingService;
 
     @Override
-    public List<BsPark> recommend(String userId, Double lng, Double lat) {
+    public List<BsPark> recommend(String userId, Double lng, Double lat, String nowDate) {
         List<BsPark> listOrderByPrice = new ArrayList<>();
         // 获取当前时间 判断是否是晚上  低价优先
         Date date = new Date();

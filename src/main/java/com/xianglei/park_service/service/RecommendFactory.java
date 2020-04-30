@@ -22,6 +22,7 @@ public class RecommendFactory {
     String userId;
     Double lng;
     Double lat;
+    String nowDate;
     @Autowired
     CheapRecommendStrategy cheapRecommendStrategy;
     @Autowired
@@ -33,10 +34,11 @@ public class RecommendFactory {
     @Autowired
     MultipleRecommendStrategy multipleRecommendStrategy;
 
-    public void setParams(String userId, Double lng, Double lat) {
+    public void setParams(String userId, Double lng, Double lat, String nowDate) {
         this.userId = userId;
         this.lng = lng;
         this.lat = lat;
+        this.nowDate=nowDate;
     }
 
 
@@ -44,19 +46,19 @@ public class RecommendFactory {
         List<BsPark> bsParks;
         switch (conditionEnum) {
             case CHEAP:
-                bsParks = cheapRecommendStrategy.recommend(userId, lng, lat);
+                bsParks = cheapRecommendStrategy.recommend(userId, lng, lat,nowDate);
                 break;
             case SALES:
-                bsParks = salesRecommendStrategy.recommend(userId, lng, lat);
+                bsParks = salesRecommendStrategy.recommend(userId, lng, lat,nowDate);
                 break;
             case SURPLUS:
-                bsParks = surplusRecommendStrategy.recommend(userId, lng, lat);
+                bsParks = surplusRecommendStrategy.recommend(userId, lng, lat,nowDate);
                 break;
             case DISTANCE:
-                bsParks = distanceRecommendStrategy.recommend(userId, lng, lat);
+                bsParks = distanceRecommendStrategy.recommend(userId, lng, lat,nowDate);
                 break;
             case MULTIPLE:
-                bsParks = multipleRecommendStrategy.recommend(userId, lng, lat);
+                bsParks = multipleRecommendStrategy.recommend(userId, lng, lat,nowDate);
                 break;
             default:
                 bsParks = new ArrayList<>();

@@ -20,7 +20,7 @@ public class SalesRecommendStrategy implements RecommendStrategy {
     ParkingService parkingService;
 
     @Override
-    public List<BsPark> recommend(String userId, Double lng, Double lat) {
+    public List<BsPark> recommend(String userId, Double lng, Double lat, String nowDate) {
         List<BsPark> listOrderBySale = parkingService.getListOrderBySale();
         return listOrderBySale;
     }

@@ -18,7 +18,8 @@ public interface RecommendStrategy {
      * @param userId
      * @param lng
      * @param lat
+     * @param nowDate
      * @return
      */
-    List<BsPark> recommend(String userId, Double lng, Double lat);
+    List<BsPark> recommend(String userId, Double lng, Double lat, String nowDate);
 }

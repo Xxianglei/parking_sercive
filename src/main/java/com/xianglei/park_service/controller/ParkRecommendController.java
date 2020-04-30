@@ -41,10 +41,11 @@ public class ParkRecommendController {
     public BaseJson recommendPark(@RequestParam(value = "userId") String userId,
                                   @RequestParam(value = "condition") String condition,
                                   @RequestParam(required = false) Double lng,
-                                  @RequestParam(required = false) Double lat) {
+                                  @RequestParam(required = false) Double lat,
+                                  @RequestParam(required = false) String nowDate) {
         BaseJson baseJson = new BaseJson(false);
         try {
-            List<BsPark> strategyThenRecommend = recommendService.findStrategyThenRecommend(userId, condition, lng, lat);
+            List<BsPark> strategyThenRecommend = recommendService.findStrategyThenRecommend(userId, condition, lng, lat,nowDate);
             if (Tools.isNotEmpty(strategyThenRecommend)) {
                 List<BsParkVO> result = recommendService.formatData(strategyThenRecommend);
                 baseJson.setStatus(true);
