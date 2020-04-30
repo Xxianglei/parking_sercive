@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Auther: Xianglei
@@ -65,12 +66,20 @@ public class ParkRecommendController {
         return baseJson;
     }
 
+    /**
+     * 获取当天剩余车位数量
+     * 获取当天订单的时间区间数组
+     * @param parkId
+     * @param nowDate
+     * @return
+     */
     @RequestMapping("/getDetails")
     public BaseJson parkInfoDetails(@RequestParam(value = "parkId") String parkId,
-                                    @RequestParam(required = false) String nowDate) {
+                                    @RequestParam(required = false) String nowDate,
+                                    @RequestParam(value = "parkInfoId") String parkInfoId) {
         BaseJson baseJson = new BaseJson(false);
         try {
-            BsParkVO strategyThenRecommend = recommendService.parkInfoDetails(parkId, nowDate);
+            Map<String,Object> strategyThenRecommend = recommendService.parkInfoDetails(parkId, nowDate,parkInfoId);
             if (Tools.isNotNull(strategyThenRecommend)) {
                 baseJson.setStatus(true);
                 baseJson.setMessage("获取成功");

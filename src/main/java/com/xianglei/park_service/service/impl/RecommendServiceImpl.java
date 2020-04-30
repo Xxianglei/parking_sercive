@@ -6,7 +6,6 @@ import com.xianglei.park_service.common.utils.DateUtils;
 import com.xianglei.park_service.domain.BsOrder;
 import com.xianglei.park_service.domain.BsPark;
 import com.xianglei.park_service.domain.BsParkVO;
-import com.xianglei.park_service.domain.PreBsOrder;
 import com.xianglei.park_service.mapper.OrderMapper;
 import com.xianglei.park_service.mapper.ParkMapper;
 import com.xianglei.park_service.service.ParkingService;
@@ -17,9 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @Auther: Xianglei
@@ -89,16 +87,47 @@ public class RecommendServiceImpl implements RecommendService {
     }
 
     @Override
-    public BsParkVO parkInfoDetails(String parkId, String nowDate) {
+    public Map<String, Object> parkInfoDetails(String parkId, String nowDate, String parkInfoId) {
+        HashMap<String, Object> map = new HashMap<>();
         Date date = DateUtils.parse(nowDate, "yyyy-MM-dd");
+        // 目标一   获取当天剩余车位数量
         List<BsOrder> bsOrders = orderMapper.selectList(new QueryWrapper<BsOrder>()
                 .eq("PARK_ID", parkId)
                 .ne("CHARGE", 2));
         parkingService.removeNotToday(bsOrders, date);
         BsPark bsPark1 = parkMapper.selectOne(new QueryWrapper<BsPark>().eq("IN_USED", 1).eq("FLOW_ID", parkId));
         Integer volume1 = bsPark1.getVolume();
-        BsParkVO bsParkVO = new BsParkVO();
-        bsParkVO.setRemain(volume1 - bsOrders.size() > 0 ? volume1 - bsOrders.size() : 0);
-        return bsParkVO;
+        map.put("remain", volume1 - bsOrders.size() > 0 ? volume1 - bsOrders.size() : 0);
+        //  目标二 获取当天订单的时间区间数组
+        List<BsOrder> orderList = orderMapper.selectList(new QueryWrapper<BsOrder>()
+                .eq("PARK_ID", parkId)
+                .ne("CHARGE", 2)
+                .eq("PARK_INFO_ID", parkInfoId));
+        ArrayList<HashMap<String, String>> timeNums = new ArrayList<>();
+        HashMap<String, String> timeMap;
+        Date formatNowDate = DateUtils.parse(nowDate, "yyyy-MM-dd");
+        for (BsOrder bsOrder : orderList) {
+            Date startTime = bsOrder.getStartTime();
+            Date endTime = bsOrder.getLeaveTime();
+            Date formatStartTime = DateUtils.parse(DateUtils.format(startTime, "yyyy-MM-dd"), "yyyy-MM-dd");
+            Date endTimeStartTime = DateUtils.parse(DateUtils.format(endTime, "yyyy-MM-dd"), "yyyy-MM-dd");
+            String endTimeStartTime2 = DateUtils.format(endTime, "HH:mm");
+            String formatStartTime2 = DateUtils.format(startTime, "HH:mm");
+            timeMap = new HashMap<>();
+            // 处理时间
+            if (formatStartTime.before(formatNowDate)) {
+                timeMap.put("start", "00:00");
+                timeMap.put("end", endTimeStartTime2);
+            } else if (endTimeStartTime.after(formatNowDate)) {
+                timeMap.put("start", endTimeStartTime2);
+                timeMap.put("end", "00:00");
+            } else {
+                timeMap.put("start", formatStartTime2);
+                timeMap.put("end", endTimeStartTime2);
+            }
+            timeNums.add(timeMap);
+        }
+        map.put("times", timeNums);
+        return map;
     }
 }

@@ -126,7 +126,6 @@ public class ParkingServiceImpl implements ParkingService {
         }
     }
 
-
     @Override
     public List<BsPark> getListOrderBySale() {
         List<BsPark> bsParks = parkMapper.selectList(new QueryWrapper<BsPark>().eq("IN_USED", 1));

@@ -2,9 +2,9 @@ package com.xianglei.park_service.service;
 
 import com.xianglei.park_service.domain.BsPark;
 import com.xianglei.park_service.domain.BsParkVO;
-import com.xianglei.park_service.domain.PreBsOrder;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Auther: Xianglei
@@ -42,7 +42,8 @@ public interface RecommendService {
      *
      * @param parkId
      * @param nowDate
+     * @param parkInfoId
      * @return
      */
-    BsParkVO parkInfoDetails(String parkId, String nowDate);
+    Map<String,Object> parkInfoDetails(String parkId, String nowDate, String parkInfoId);
 }
