@@ -4,6 +4,7 @@ import com.xianglei.park_service.common.BaseJson;
 import com.xianglei.park_service.common.utils.Tools;
 import com.xianglei.park_service.domain.BsPark;
 import com.xianglei.park_service.domain.BsParkVO;
+import com.xianglei.park_service.domain.PreBsOrder;
 import com.xianglei.park_service.service.RecommendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +46,7 @@ public class ParkRecommendController {
                                   @RequestParam(required = false) String nowDate) {
         BaseJson baseJson = new BaseJson(false);
         try {
-            List<BsPark> strategyThenRecommend = recommendService.findStrategyThenRecommend(userId, condition, lng, lat,nowDate);
+            List<BsPark> strategyThenRecommend = recommendService.findStrategyThenRecommend(userId, condition, lng, lat, nowDate);
             if (Tools.isNotEmpty(strategyThenRecommend)) {
                 List<BsParkVO> result = recommendService.formatData(strategyThenRecommend);
                 baseJson.setStatus(true);
@@ -63,4 +64,28 @@ public class ParkRecommendController {
 
         return baseJson;
     }
+
+    @RequestMapping("/getDetails")
+    public BaseJson parkInfoDetails(@RequestParam(value = "parkId") String parkId,
+                                    @RequestParam(required = false) String nowDate) {
+        BaseJson baseJson = new BaseJson(false);
+        try {
+            BsParkVO strategyThenRecommend = recommendService.parkInfoDetails(parkId, nowDate);
+            if (Tools.isNotNull(strategyThenRecommend)) {
+                baseJson.setStatus(true);
+                baseJson.setMessage("获取成功");
+                baseJson.setCode(200);
+                baseJson.setData(strategyThenRecommend);
+            } else {
+                baseJson.setMessage("获取失败");
+                baseJson.setCode(500);
+            }
+        } catch (Exception e) {
+            baseJson.setMessage("获取失败" + e);
+            baseJson.setCode(500);
+        }
+
+        return baseJson;
+    }
+
 }

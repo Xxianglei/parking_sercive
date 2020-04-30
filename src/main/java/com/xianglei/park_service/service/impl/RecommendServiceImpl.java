@@ -6,7 +6,9 @@ import com.xianglei.park_service.common.utils.DateUtils;
 import com.xianglei.park_service.domain.BsOrder;
 import com.xianglei.park_service.domain.BsPark;
 import com.xianglei.park_service.domain.BsParkVO;
+import com.xianglei.park_service.domain.PreBsOrder;
 import com.xianglei.park_service.mapper.OrderMapper;
+import com.xianglei.park_service.mapper.ParkMapper;
 import com.xianglei.park_service.service.ParkingService;
 import com.xianglei.park_service.service.RecommendFactory;
 import com.xianglei.park_service.service.RecommendService;
@@ -35,6 +37,8 @@ public class RecommendServiceImpl implements RecommendService {
     OrderMapper orderMapper;
     @Autowired
     ParkingService parkingService;
+    @Autowired
+    ParkMapper parkMapper;
 
     @Override
     public List<BsPark> findStrategyThenRecommend(String userId, String condition, Double lng, Double lat, String nowDate) {
@@ -82,5 +86,19 @@ public class RecommendServiceImpl implements RecommendService {
             bsParkVOS.add(bsParkVO);
         }
         return bsParkVOS;
+    }
+
+    @Override
+    public BsParkVO parkInfoDetails(String parkId, String nowDate) {
+        Date date = DateUtils.parse(nowDate, "yyyy-MM-dd");
+        List<BsOrder> bsOrders = orderMapper.selectList(new QueryWrapper<BsOrder>()
+                .eq("PARK_ID", parkId)
+                .ne("CHARGE", 2));
+        parkingService.removeNotToday(bsOrders, date);
+        BsPark bsPark1 = parkMapper.selectOne(new QueryWrapper<BsPark>().eq("IN_USED", 1).eq("FLOW_ID", parkId));
+        Integer volume1 = bsPark1.getVolume();
+        BsParkVO bsParkVO = new BsParkVO();
+        bsParkVO.setRemain(volume1 - bsOrders.size() > 0 ? volume1 - bsOrders.size() : 0);
+        return bsParkVO;
     }
 }

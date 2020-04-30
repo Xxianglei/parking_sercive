@@ -2,6 +2,7 @@ package com.xianglei.park_service.service;
 
 import com.xianglei.park_service.domain.BsPark;
 import com.xianglei.park_service.domain.BsParkVO;
+import com.xianglei.park_service.domain.PreBsOrder;
 
 import java.util.List;
 
@@ -35,4 +36,13 @@ public interface RecommendService {
      * @return
      */
     List<BsParkVO> formatData(List<BsPark> strategyThenRecommend);
+
+    /**
+     * 获取当前车位具体信息  主要是获取当天车位剩余量
+     *
+     * @param parkId
+     * @param nowDate
+     * @return
+     */
+    BsParkVO parkInfoDetails(String parkId, String nowDate);
 }
