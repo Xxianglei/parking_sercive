@@ -110,20 +110,22 @@ public class RecommendServiceImpl implements RecommendService {
             Date startTime = bsOrder.getStartTime();
             Date endTime = bsOrder.getLeaveTime();
             Date formatStartTime = DateUtils.parse(DateUtils.format(startTime, "yyyy-MM-dd"), "yyyy-MM-dd");
-            Date endTimeStartTime = DateUtils.parse(DateUtils.format(endTime, "yyyy-MM-dd"), "yyyy-MM-dd");
-            String endTimeStartTime2 = DateUtils.format(endTime, "HH:mm");
-            String formatStartTime2 = DateUtils.format(startTime, "HH:mm");
+            Date formatEndTime = DateUtils.parse(DateUtils.format(endTime, "yyyy-MM-dd"), "yyyy-MM-dd");
+            String endTime2 = DateUtils.format(endTime, "HH:mm");
+            String startTime2 = DateUtils.format(startTime, "HH:mm");
             timeMap = new HashMap<>();
             // 处理时间
-            if (formatStartTime.before(formatNowDate)) {
-                timeMap.put("start", "00:00");
-                timeMap.put("end", endTimeStartTime2);
-            } else if (endTimeStartTime.after(formatNowDate)) {
-                timeMap.put("start", endTimeStartTime2);
+            if (formatStartTime.compareTo(formatNowDate)>=0) {
+                timeMap.put("start", startTime2);
                 timeMap.put("end", "00:00");
-            } else {
-                timeMap.put("start", formatStartTime2);
-                timeMap.put("end", endTimeStartTime2);
+            }
+            if (formatEndTime.compareTo(formatNowDate)<=0) {
+                timeMap.put("start", "00:00");
+                timeMap.put("end", endTime2);
+            }
+            if (formatStartTime.compareTo(formatNowDate) == 0 && formatEndTime.compareTo(formatNowDate) == 0) {
+                timeMap.put("start", startTime2);
+                timeMap.put("end", endTime2);
             }
             timeNums.add(timeMap);
         }
