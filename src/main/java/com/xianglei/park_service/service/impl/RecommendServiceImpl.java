@@ -114,15 +114,7 @@ public class RecommendServiceImpl implements RecommendService {
             String endTime2 = DateUtils.format(endTime, "HH:mm");
             String startTime2 = DateUtils.format(startTime, "HH:mm");
             timeMap = new HashMap<>();
-            // 处理时间
-            if (formatStartTime.compareTo(formatNowDate)>=0) {
-                timeMap.put("start", startTime2);
-                timeMap.put("end", "00:00");
-            }
-            if (formatEndTime.compareTo(formatNowDate)<=0) {
-                timeMap.put("start", "00:00");
-                timeMap.put("end", endTime2);
-            }
+            // 处理时间   只能下24小时范围内的订单
             if (formatStartTime.compareTo(formatNowDate) == 0 && formatEndTime.compareTo(formatNowDate) == 0) {
                 timeMap.put("start", startTime2);
                 timeMap.put("end", endTime2);
