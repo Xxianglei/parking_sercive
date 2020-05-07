@@ -6,6 +6,7 @@ import com.xianglei.park_service.domain.BsPark;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 停车场管理
@@ -49,4 +50,5 @@ public interface ParkingService {
      * @return
      */
     List<BsPark> getListOrderByMultiple(String userId, Double lng, Double lat);
+
 }
