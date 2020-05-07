@@ -1,6 +1,7 @@
 package com.xianglei.park_service.service;
 
 import com.xianglei.park_service.domain.BsPark;
+import com.xianglei.park_service.domain.BsParkInfo;
 
 import java.util.List;
 
@@ -37,9 +38,38 @@ public interface ParkingManageService {
 
     /**
      * 根据ID删除停车场
+     *
      * @param flowId
      * @return
      */
     int deleteParkById(String flowId);
 
+    /**
+     * 根据停车场id获取车位信息列表
+     *
+     * @param flowId
+     * @return
+     */
+    List<BsParkInfo> getParkInfoListByParkId(String flowId);
+
+    /**
+     * 根据车位id删除车位信息
+     * @param parkInfoFlowId
+     * @return
+     */
+    int deleteParkInfoByParkId(String parkInfoFlowId);
+
+    /**
+     * 根据停车场id新增车位
+     * @param bsParkInfo
+     * @return
+     */
+    int addParkInfoListByParkId(BsParkInfo bsParkInfo);
+
+    /**
+     * 更新车位宽高
+     * @param bsParkInfo
+     * @return
+     */
+    int updateParkInfoByParkId(BsParkInfo bsParkInfo);
 }
