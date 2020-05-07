@@ -3,10 +3,13 @@ package com.xianglei.park_service.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xianglei.park_service.common.ConditionEnum;
 import com.xianglei.park_service.common.utils.DateUtils;
+import com.xianglei.park_service.common.utils.Tools;
 import com.xianglei.park_service.domain.BsOrder;
 import com.xianglei.park_service.domain.BsPark;
+import com.xianglei.park_service.domain.BsParkInfo;
 import com.xianglei.park_service.domain.BsParkVO;
 import com.xianglei.park_service.mapper.OrderMapper;
+import com.xianglei.park_service.mapper.ParkInfoMapper;
 import com.xianglei.park_service.mapper.ParkMapper;
 import com.xianglei.park_service.service.ParkingService;
 import com.xianglei.park_service.service.RecommendFactory;
@@ -37,6 +40,8 @@ public class RecommendServiceImpl implements RecommendService {
     ParkingService parkingService;
     @Autowired
     ParkMapper parkMapper;
+    @Autowired
+    ParkInfoMapper parkInfoMapper;
 
     @Override
     public List<BsPark> findStrategyThenRecommend(String userId, String condition, Double lng, Double lat, String nowDate) {
@@ -121,7 +126,20 @@ public class RecommendServiceImpl implements RecommendService {
             }
             timeNums.add(timeMap);
         }
+        // 获取当前停车场的最小 最大车位号码
+        List<BsParkInfo> parkInfoList = parkInfoMapper.selectList(new QueryWrapper<BsParkInfo>().eq("PARK_ID", parkId).orderByDesc("PARK_NUM"));
         map.put("times", timeNums);
+        if (Tools.isNotEmpty(parkInfoList)) {
+            String maxNum = parkInfoList.get(0).getParkNum();
+            String minNum = parkInfoList.get(parkInfoList.size() - 1).getParkNum();
+            maxNum = maxNum + "-01-01";
+            minNum = minNum + "-01-01";
+            map.put("max", maxNum);
+            map.put("min", minNum);
+        } else {
+            map.put("max", "1000-01-01");
+            map.put("min", "1000-01-01");
+        }
         return map;
     }
 }
