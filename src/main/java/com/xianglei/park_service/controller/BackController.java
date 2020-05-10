@@ -86,6 +86,33 @@ public class BackController {
     }
 
     /**
+     * 根据名称查询停车场
+     * 模糊查找
+     * @param
+     * @return
+     */
+    @RequestMapping("/getParksByName")
+    public BaseJson getParks(@RequestParam String parkName) {
+        BaseJson baseJson = new BaseJson(false);
+        try {
+            List<BsPark> bsParkList = ParkingManageService.getParks(parkName);
+            if (Tools.isNotEmpty(bsParkList)) {
+                baseJson.setStatus(true);
+                baseJson.setMessage("查询成功");
+                baseJson.setCode(200);
+                baseJson.setData(bsParkList);
+            } else {
+                baseJson.setMessage("停车场列表为空");
+                baseJson.setCode(500);
+            }
+
+        } catch (Exception e) {
+            baseJson.setMessage("停车场列表查看内部异常导致失败" + e);
+            baseJson.setCode(500);
+        }
+        return baseJson;
+    }
+    /**
      * 停车场信息更新
      *
      * @param

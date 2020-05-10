@@ -167,4 +167,10 @@ public class ParkingManageServiceImpl implements ParkingManageService {
         }
         return res;
     }
+
+    @Override
+    public List<BsPark> getParks(String parkName) {
+        List<BsPark> bsParks = parkMapper.selectList(new QueryWrapper<BsPark>().like("PARK_NAME", parkName));
+        return bsParks;
+    }
 }

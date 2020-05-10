@@ -72,4 +72,11 @@ public interface ParkingManageService {
      * @return
      */
     int updateParkInfoByParkId(BsParkInfo bsParkInfo);
+
+    /**
+     * 根据名称模糊查找
+     * @param parkName
+     * @return
+     */
+    List<BsPark> getParks(String parkName);
 }
