@@ -78,17 +78,14 @@ public class ParkingManageServiceImpl implements ParkingManageService {
         }
     }
 
+    @Transactional
     @Override
     public int deleteParkById(String flowId) {
         // 删除车位信息
         int delete = parkInfoMapper.delete(new QueryWrapper<BsParkInfo>().eq("PARK_ID", flowId));
-        if (delete != 0) {
-            // 删除停车场信息
-            int i = parkMapper.deleteById(flowId);
-            return i;
-        } else {
-            return 0;
-        }
+        // 删除停车场信息
+        int i = parkMapper.deleteById(flowId);
+        return i;
     }
 
     @Override
