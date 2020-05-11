@@ -43,3 +43,11 @@ logging:
 
 mybatis:
   type-aliases-package: com.xianglei.account_service.domain
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
