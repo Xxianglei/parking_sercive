@@ -115,12 +115,12 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public void removeNotToday(List<BsOrder> bsOrders, Date now) {
         Iterator<BsOrder> iterator = bsOrders.iterator();
-        // 去掉占用时间没有覆盖当前时间的订单
+        // 计算正在使用中的车位数量
         while (iterator.hasNext()) {
             BsOrder order = iterator.next();
             Date startTime = order.getStartTime();
             Date leaveTime = order.getLeaveTime();
-            if (now.before(startTime) || now.after(leaveTime)) {
+            if ((startTime.before(now)&& leaveTime.after(leaveTime))) {
                 iterator.remove();
             }
         }
