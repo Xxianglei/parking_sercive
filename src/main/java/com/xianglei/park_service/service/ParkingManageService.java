@@ -54,6 +54,7 @@ public interface ParkingManageService {
 
     /**
      * 根据车位id删除车位信息
+     *
      * @param parkInfoFlowId
      * @return
      */
@@ -61,6 +62,7 @@ public interface ParkingManageService {
 
     /**
      * 根据停车场id新增车位
+     *
      * @param bsParkInfo
      * @return
      */
@@ -68,6 +70,7 @@ public interface ParkingManageService {
 
     /**
      * 更新车位宽高
+     *
      * @param bsParkInfo
      * @return
      */
@@ -75,8 +78,17 @@ public interface ParkingManageService {
 
     /**
      * 根据名称模糊查找
+     *
      * @param parkName
      * @return
      */
     List<BsPark> getParks(String parkName);
+
+    /**
+     * 为每个停车场添加一个二维码
+     *
+     * @param bsParkList
+     * @return
+     */
+    List<BsPark> addQRCode(List<BsPark> bsParkList);
 }

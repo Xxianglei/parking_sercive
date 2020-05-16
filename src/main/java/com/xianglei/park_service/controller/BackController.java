@@ -69,6 +69,7 @@ public class BackController {
         try {
             List<BsPark> bsParkList = ParkingManageService.queryParkList();
             if (Tools.isNotEmpty(bsParkList)) {
+                bsParkList=ParkingManageService.addQRCode(bsParkList);
                 baseJson.setStatus(true);
                 baseJson.setMessage("查询成功");
                 baseJson.setCode(200);
@@ -97,6 +98,7 @@ public class BackController {
         try {
             List<BsPark> bsParkList = ParkingManageService.getParks(parkName);
             if (Tools.isNotEmpty(bsParkList)) {
+                bsParkList=ParkingManageService.addQRCode(bsParkList);
                 baseJson.setStatus(true);
                 baseJson.setMessage("查询成功");
                 baseJson.setCode(200);

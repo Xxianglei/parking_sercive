@@ -1,20 +1,22 @@
 package com.xianglei.park_service.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xianglei.park_service.common.utils.Tools;
 import com.xianglei.park_service.domain.BsOrder;
 import com.xianglei.park_service.domain.BsPark;
 import com.xianglei.park_service.domain.BsParkInfo;
+import com.xianglei.park_service.domain.QRCodeContent;
 import com.xianglei.park_service.mapper.OrderMapper;
 import com.xianglei.park_service.mapper.ParkInfoMapper;
 import com.xianglei.park_service.mapper.ParkMapper;
 import com.xianglei.park_service.service.ParkingManageService;
+import com.xianglei.park_service.service.QRCodeService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.BitSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +35,8 @@ public class ParkingManageServiceImpl implements ParkingManageService {
     ParkInfoMapper parkInfoMapper;
     @Autowired
     OrderMapper orderMapper;
+    @Autowired
+    QRCodeService qrCodeService;
 
     @Transactional
     @Override
@@ -54,7 +58,13 @@ public class ParkingManageServiceImpl implements ParkingManageService {
                 startIndexNum++;
             }
         }
-        return insert;
+        // 存二维码
+        QRCodeContent qrCodeContent = new QRCodeContent();
+        qrCodeContent.setParkId(parkId);
+        qrCodeContent.setParkName(map.getParkName());
+        String content = JSON.toJSONString(qrCodeContent);
+        int res = qrCodeService.addCode(content, parkId);
+        return insert & res;
     }
 
     @Override
@@ -63,16 +73,25 @@ public class ParkingManageServiceImpl implements ParkingManageService {
         return bsParkList;
     }
 
+    @Transactional
     @Override
     public int updateParkById(BsPark bsPark) {
         String flowId = bsPark.getFlowId();
         if (StringUtils.isNotEmpty(flowId)) {
+            // 删二维码
+            int i1 = qrCodeService.deleteCode(flowId);
             // 默认容量不可修改 只能删除后重新添加
             BsPark selectById = parkMapper.selectById(bsPark.getFlowId());
             Integer oldVolume = selectById.getVolume();
             bsPark.setVolume(oldVolume);
             int i = parkMapper.updateById(bsPark);
-            return i;
+            // 存二维码
+            QRCodeContent qrCodeContent = new QRCodeContent();
+            qrCodeContent.setParkId(flowId);
+            qrCodeContent.setParkName(bsPark.getParkName());
+            String content = JSON.toJSONString(qrCodeContent);
+            int res = qrCodeService.addCode(content, flowId);
+            return i & res & i1;
         } else {
             return 0;
         }
@@ -85,7 +104,13 @@ public class ParkingManageServiceImpl implements ParkingManageService {
         int delete = parkInfoMapper.delete(new QueryWrapper<BsParkInfo>().eq("PARK_ID", flowId));
         // 删除停车场信息
         int i = parkMapper.deleteById(flowId);
-        return i;
+        // 删除二维码
+        int res = qrCodeService.deleteCode(flowId);
+        if (i != 0 && res != 0) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -169,5 +194,15 @@ public class ParkingManageServiceImpl implements ParkingManageService {
     public List<BsPark> getParks(String parkName) {
         List<BsPark> bsParks = parkMapper.selectList(new QueryWrapper<BsPark>().like("PARK_NAME", parkName));
         return bsParks;
+    }
+
+    @Override
+    public List<BsPark> addQRCode(List<BsPark> bsParkList) {
+        for (BsPark bsPark : bsParkList) {
+            String flowId = bsPark.getFlowId();
+            byte[] image = qrCodeService.getImage(flowId);
+            bsPark.setImages(image);
+        }
+        return bsParkList;
     }
 }
