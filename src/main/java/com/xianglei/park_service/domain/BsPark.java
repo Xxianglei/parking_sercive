@@ -72,6 +72,7 @@ public class BsPark implements Serializable, Cloneable {
     @TableField("STRATAGE")
     private String stratage;
 
+    @TableField(exist = false)
     private byte[] images;
 
     public byte[] getImages() {
